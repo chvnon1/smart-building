@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Smart Building Maintenance</title>
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+</head>
+
+<body>
+
+    <header class="topbar">
+
+        <div>
+            <h1>AI & IoT Smart Building</h1>
+            <p>ระบบบริหารจัดการและแจ้งเตือนซ่อมบำรุง</p>
+        </div>
+
+        <div class="system-status">
+            <span class="status-dot"></span>
+            ระบบทำงานปกติ
+        </div>
+
+        <button class="logout-button" onclick="logout()">
+  ออกจากระบบ
+</button>
+
+    </header>
+
+
+    <main class="container">
+        <!-- =========================
+     RESIDENT MAINTENANCE FORM
+========================= -->
+
+<section class="resident-section">
+
+    <div class="section-header">
+
+        <div>
+            <h2>📝 แจ้งซ่อมสำหรับลูกบ้าน</h2>
+            <p>
+                แจ้งปัญหาภายในห้องพักหรือพื้นที่ส่วนกลาง
+            </p>
+        </div>
+
+    </div>
+
+
+    <form id="maintenanceForm">
+
+        <!-- อาคาร -->
+
+        <div class="form-group">
+
+            <label for="building">
+                อาคาร
+            </label>
+
+            <select id="building" required>
+
+                <option value="">
+                    -- เลือกอาคาร --
+                </option>
+
+                <option value="อาคาร A">
+                    อาคาร A
+                </option>
+
+                <option value="อาคาร B">
+                    อาคาร B
+                </option>
+
+                <option value="อาคาร C">
+                    อาคาร C
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <!-- ชั้น -->
+
+        <div class="form-group">
+
+            <label for="floor">
+                ชั้น
+            </label>
+
+            <input
+                type="number"
+                id="floor"
+                min="1"
+                max="100"
+                placeholder="เช่น 5"
+                required
+            >
+
+        </div>
+
+
+        <!-- ห้อง -->
+
+        <div class="form-group">
+
+            <label for="room">
+                เลขห้อง
+            </label>
+
+            <input
+                type="text"
+                id="room"
+                placeholder="เช่น 503"
+                required
+            >
+
+        </div>
+
+
+        <!-- ประเภทปัญหา -->
+
+        <div class="form-group">
+
+            <label for="problemType">
+                ประเภทปัญหา
+            </label>
+
+            <select id="problemType" required>
+
+                <option value="">
+                    -- เลือกประเภทปัญหา --
+                </option>
+
+                <option value="ไฟฟ้า">
+                    ⚡ ไฟฟ้า
+                </option>
+
+                <option value="ประปา">
+                    💧 ประปา
+                </option>
+
+                <option value="เครื่องปรับอากาศ">
+                    ❄️ เครื่องปรับอากาศ
+                </option>
+
+                <option value="ลิฟต์">
+                    🛗 ลิฟต์
+                </option>
+
+                <option value="อินเทอร์เน็ต">
+                    🌐 อินเทอร์เน็ต
+                </option>
+
+                <option value="อื่นๆ">
+                    🔧 อื่นๆ
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <!-- รายละเอียด -->
+
+        <div class="form-group">
+
+            <label for="problemDetail">
+                รายละเอียดปัญหา
+            </label>
+
+            <textarea
+                id="problemDetail"
+                rows="5"
+                placeholder="อธิบายปัญหาที่พบ..."
+                required
+            ></textarea>
+
+        </div>
+
+
+        <!-- ความเร่งด่วน -->
+
+        <div class="form-group">
+
+            <label for="priority">
+                ระดับความเร่งด่วน
+            </label>
+
+            <select id="priority" required>
+
+                <option value="">
+                    -- เลือกระดับ --
+                </option>
+
+                <option value="ปกติ">
+                    🟢 ปกติ
+                </option>
+
+                <option value="ปานกลาง">
+                    🟡 ปานกลาง
+                </option>
+
+                <option value="เร่งด่วน">
+                    🔴 เร่งด่วน
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <!-- รูปภาพ -->
+
+        <div class="form-group">
+
+            <label for="problemImage">
+                รูปภาพปัญหา
+            </label>
+
+            <input
+                type="file"
+                id="problemImage"
+                accept="image/*"
+            >
+
+            <small>
+                สามารถแนบรูปภาพประกอบการแจ้งซ่อมได้
+            </small>
+
+        </div>
+
+
+        <!-- ปุ่ม -->
+
+        <div class="form-actions">
+
+            <button
+                type="submit"
+                class="submit-maintenance">
+
+                📤 ส่งแจ้งซ่อม
+
+            </button>
+
+        </div>
+
+    </form>
+
+</section>
+
+<section class="my-jobs-section">
+
+  <div class="section-header">
+    <div>
+      <h2>📋 งานแจ้งซ่อมของฉัน</h2>
+      <p>ติดตามสถานะงานที่คุณแจ้ง</p>
+    </div>
+  </div>
+
+  <div id="myJobsList">
+    <div class="empty">
+      ยังไม่มีงานแจ้งซ่อม
+    </div>
+  </div>
+
+</section>
+
+        <!-- KPI -->
+
+        <section class="kpi-grid">
+
+            <div class="kpi-card">
+                <div class="kpi-title">งานซ่อมทั้งหมด</div>
+                <div class="kpi-number" id="totalJobs">0</div>
+            </div>
+
+            <div class="kpi-card warning">
+                <div class="kpi-title">งานใหม่</div>
+                <div class="kpi-number" id="newJobs">0</div>
+            </div>
+
+            <div class="kpi-card progress">
+                <div class="kpi-title">กำลังดำเนินการ</div>
+                <div class="kpi-number" id="workingJobs">0</div>
+            </div>
+
+            <div class="kpi-card success">
+                <div class="kpi-title">เสร็จแล้ว</div>
+                <div class="kpi-number" id="completedJobs">0</div>
+            </div>
+
+        </section>
+
+
+        <!-- Notification -->
+
+        <section class="notification-section">
+
+            <div class="section-header">
+
+                <div>
+                    <h2>🔔 แจ้งเตือนงานซ่อม</h2>
+                    <p>รายการแจ้งเตือนจากระบบ</p>
+                </div>
+
+                <button id="testNotification">
+                    ทดสอบแจ้งเตือน
+                </button>
+
+            </div>
+
+
+            <div id="notificationList">
+
+                <div class="empty">
+                    ยังไม่มีการแจ้งเตือน
+                </div>
+
+            </div>
+
+        </section>
+
+        <section class="admin-dashboard-section">
+
+  <div class="section-header">
+    <div>
+      <h2>👨‍💼 Admin Dashboard</h2>
+      <p>ภาพรวมงานซ่อมบำรุงทั้งหมด</p>
+    </div>
+  </div>
+
+  <div class="admin-kpi-grid">
+
+    <div class="admin-card">
+      <span>งานทั้งหมด</span>
+      <strong id="adminTotalJobs">0</strong>
+    </div>
+
+    <div class="admin-card">
+      <span>งานใหม่</span>
+      <strong id="adminNewJobs">0</strong>
+    </div>
+
+    <div class="admin-card">
+      <span>กำลังดำเนินการ</span>
+      <strong id="adminWorkingJobs">0</strong>
+    </div>
+
+    <div class="admin-card">
+      <span>เสร็จแล้ว</span>
+      <strong id="adminCompletedJobs">0</strong>
+    </div>
+
+  </div>
+
+  <div class="admin-recent-section">
+
+    <h3>📋 งานล่าสุด</h3>
+
+    <div id="adminRecentJobs">
+      <div class="empty">
+        ยังไม่มีงาน
+      </div>
+    </div>
+
+  </div>
+
+</section>
+
+
+        <!-- Work Orders -->
+
+       <section class="work-order-section">
+
+    <div class="section-header">
+
+        <div>
+            <h2>🛠️ Work Order</h2>
+            <p>รายการงานซ่อมบำรุง</p>
+        </div>
+
+    </div>
+
+    <div id="workOrderList">
+
+        <div class="empty">
+            ยังไม่มีงานซ่อม
+        </div>
+
+    </div>
+
+</section>
+
+<!-- =========================
+     WORK ORDER MODAL
+========================= -->
+
+<div id="workModal" class="modal">
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+
+            <h2>รายละเอียดงานซ่อม</h2>
+
+            <button
+                class="close-button"
+                onclick="closeWorkModal()">
+                ×
+            </button>
+
+        </div>
+
+              <div id="workDetail">
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- Assign Technician Modal -->
+
+<div id="assignModal" class="modal">
+
+  <div class="modal-content">
+
+    <div class="modal-header">
+
+      <h2>👷 มอบหมายช่าง</h2>
+
+      <button
+        class="modal-close"
+        onclick="closeAssignTechnician()">
+        ×
+      </button>
+
+    </div>
+
+    <div class="modal-body">
+
+      <p>
+        เลือกช่างที่ต้องการมอบหมายงาน
+      </p>
+
+      <select id="technicianSelect">
+
+        <option value="">
+          -- เลือกช่าง --
+        </option>
+
+        <option value="technician01">
+          ช่าง technician01
+        </option>
+
+        <option value="technician02">
+          ช่าง technician02
+        </option>
+
+        <option value="technician03">
+          ช่าง technician03
+        </option>
+
+      </select>
+
+      <button
+        class="primary-button"
+        onclick="assignTechnician()">
+        ✓ ยืนยันการมอบหมาย
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+        </section>
+
+    </main>
+
+
+    <script src="app.js"></script>
+
+</body>
+</html>
+<!-- LOGIN -->
+<div id="loginPage" class="login-page">
+  <div class="login-box">
+    <h1>🏢 Smart Building</h1>
+    <p>เข้าสู่ระบบจัดการอาคาร</p>
+
+    <div class="form-group">
+      <label>ชื่อผู้ใช้งาน</label>
+      <input
+        type="text"
+        id="loginUsername"
+        placeholder="กรอกชื่อผู้ใช้งาน"
+      >
+    </div>
+
+    <div class="form-group">
+      <label>รหัสผ่าน</label>
+      <input
+        type="password"
+        id="loginPassword"
+        placeholder="กรอกรหัสผ่าน"
+      >
+    </div>
+
+    <div class="form-group">
+      <label>ประเภทผู้ใช้งาน</label>
+      <select id="loginRole">
+        <option value="resident">👤 ลูกบ้าน</option>
+        <option value="technician">🔧 ช่าง</option>
+        <option value="admin">👨‍💼 Admin</option>
+      </select>
+    </div>
+
+    <button class="login-button" onclick="login()">
+      🔐 เข้าสู่ระบบ
+    </button>
+
+    <div id="loginError" class="login-error"></div>
+  </div>
+</div>
