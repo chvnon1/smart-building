@@ -13,10 +13,10 @@ let workOrders = [];
 // ==========================================
 
 const maintenanceProblems = [
-
     {
         title: "ตรวจสอบเครื่องปรับอากาศ",
         location: "อาคาร A ชั้น 3",
+        room: "305",
         problem: "ตรวจพบอุณหภูมิสูงผิดปกติจาก Sensor",
         priority: "เร่งด่วน"
     },
@@ -24,6 +24,7 @@ const maintenanceProblems = [
     {
         title: "ตรวจสอบปั๊มน้ำ",
         location: "อาคาร A ชั้น 1",
+        room: "105",
         problem: "ตรวจพบแรงดันน้ำผิดปกติ",
         priority: "ปานกลาง"
     },
@@ -31,6 +32,7 @@ const maintenanceProblems = [
     {
         title: "ตรวจสอบระบบไฟฟ้า",
         location: "อาคาร B ชั้น 5",
+        room: "508",
         problem: "ตรวจพบการใช้พลังงานสูงกว่าปกติ",
         priority: "เร่งด่วน"
     },
@@ -38,6 +40,7 @@ const maintenanceProblems = [
     {
         title: "ตรวจสอบมอเตอร์",
         location: "อาคาร B ชั้น 2",
+        room: "204",
         problem: "ตรวจพบค่าการสั่นสะเทือนสูง",
         priority: "ปานกลาง"
     },
@@ -45,10 +48,10 @@ const maintenanceProblems = [
     {
         title: "ตรวจสอบอุณหภูมิห้อง",
         location: "อาคาร C ชั้น 4",
+        room: "402",
         problem: "อุณหภูมิสูงกว่าค่าปกติ",
         priority: "ปานกลาง"
     }
-
 ];
 
 
@@ -117,33 +120,23 @@ function createMaintenanceJob(auto = false) {
 
 
     const job = {
+    id: "WO-" + Date.now(),
 
-        id:
-            "WO-" +
-            Date.now(),
+    title: problem.title,
 
-        title:
-            problem.title,
+    location:
+        `${problem.location} ห้อง ${problem.room}`,
 
-        location:
-            problem.location,
+    problem: problem.problem,
 
-        problem:
-            problem.problem,
+    priority: problem.priority,
 
-        priority:
-            problem.priority,
+    status: "ใหม่",
 
-        status:
-            "ใหม่",
+    time: now.toLocaleString("th-TH"),
 
-        time:
-            now.toLocaleString("th-TH"),
-
-        automatic:
-            auto
-
-    };
+    automatic: auto
+};
 
 
     workOrders.unshift(job);
